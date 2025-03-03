@@ -1,0 +1,53 @@
+model new
+model restore 'mmm1'
+block contact jmodel assign mohr
+block contact property stiffness-normal 1e11 stiffness-shear 1e11 cohesion 2e7 friction 30 tension 1e7
+block contact material-table default property stiffness-normal 1e11 stiffness-shear 1e11 cohesion 2e7 friction 30 tension 1e7
+
+block zone cmodel assign elastic
+block zone property dens 2590 bulk 1.09e9 she 0.88e9 range group '1'
+block zone property dens 2541 bulk 2.46e9 she 1.73e9 range group '2'
+block zone property dens 2492 bulk 10.2e9 she 5.1e9  range group '3'
+block zone property dens 2558 bulk 5.68e9 she 3.12e9 range group '4'
+block zone property dens 2700 bulk 7.32e9 she 10e9 range group '5'
+block zone property dens 2254 bulk 5.2e9 she 2.7e9 range group '6'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 range group '7'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 range group '11'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 range group '12'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 range group '13'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 range group '14'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 range group '15'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 range group '16'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 range group '17'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 range group '18'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 range group '19'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 range group '20'
+
+
+block gridpoint apply velocity-x 0 range position-x  500633,500635
+block gridpoint apply velocity-x 0 range position-x  499689,499690
+block gridpoint apply velocity-y 0 range position-y  3947079,3947080
+block gridpoint apply velocity-y 0 range position-y  3945646,3945647
+block gridpoint apply velocity-z 0 range position-z  99,100
+model grav 0 0 -10
+
+
+
+block insitu topo ratio-x 0.5 ratio-y 0.5
+model solve ratio 1e-4
+
+fish define get_ini_stress
+      loop foreach local zp block.zone.list
+          block.zone.extra(zp,1) =block.zone.stress.zz(zp)
+          block.zone.extra(zp,2) =block.zone.stress.min(zp)
+      end_loop 
+end
+[get_ini_stress]
+
+
+
+model save 'mmm2'
+;call'mmm3.txt'
+================================
+
+

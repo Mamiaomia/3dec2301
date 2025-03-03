@@ -1,0 +1,77 @@
+model new
+model restore 'mmm1'
+block contact jmodel assign mohr
+block contact property stiffness-normal 1e11 stiffness-shear 1e11 cohesion 2e7 friction 30 tension 1e7
+block contact material-table default property stiffness-normal 1e11 stiffness-shear 1e11 cohesion 2e7 friction 30 tension 1e7
+
+block zone cmodel assign elastic
+;表土层没有
+;block zone property dens 2000 young 0.51E+09 poisson 18.35 range group '1'
+block zone property dens 2541 young 8.64E+09 poisson 0.24 range group '1'
+block zone property dens 2492 young 5.8E+09 poisson 0.31  range group '2'
+block zone property dens 2558 young 8.64E+09 poisson 0.24 range group '3'
+block zone property dens 2700 young 5.80E+09 poisson 0.31 range group '4'
+block zone property dens 2254 young 6.70E+09 poisson 0.26 range group '5'
+block zone property dens 1268 young 6.20E+09 poisson 0.27 range group '6'
+block zone property dens 1268 young 5.80E+09 poisson 0.31 range group '7'
+block zone property dens 1268 young 8.64E+09 poisson 0.24 range group '8'
+block zone property dens 1268 young 5.80E+09 poisson 0.31 range group '9'
+block zone property dens 1268 young 6.70E+09 poisson 0.26 range group '10'
+
+fish define set_properties
+    local i = 11
+    loop while i <= 30
+        local group_name = string(i)  ; 转换为字符串
+        command
+            block zone property dens 1400 young 3.60E+09 poisson 0.32 range group @group_name
+        endcommand
+        i = i + 1
+    endloop
+end
+[set_properties]
+
+
+
+block gridpoint apply velocity-x 0 range position-x  500633,500635
+block gridpoint apply velocity-x 0 range position-x  499689,499690
+block gridpoint apply velocity-y 0 range position-y  3947079,3947080
+block gridpoint apply velocity-y 0 range position-y  3945646,3945647
+block gridpoint apply velocity-z 0 range position-z  189.5,190.5
+model grav 0 0 -10
+
+;block insitu stress 0 0 0 0,0,0 gradient-z 15180  10120  25300  0,0,0 range group '1'
+;block insitu stress 39900 26600 66500 0,0,0 gradient-z 15600  10400  26000  0,0,0 range group '2'
+;block insitu stress -14700 -9800 -24500 0,0,0 gradient-z 15180  10120  25300  0,0,0 range group '3'
+;block insitu stress 60900 40600 101500 0,0,0 gradient-z 15600  10400  26000  0,0,0 range group '4'
+;block insitu stress 28500 19000 47500 0,0,0 gradient-z 15480  10320  25800  0,0,0 range group '5'
+;block insitu stress 71340 47560 118900 0,0,0 gradient-z 15600  10400  26000  0,0,0 range group '6'
+;block insitu stress 71340 47560 118900 0,0,0 gradient-z 15600  10400  26000  0,0,0 range group '7'
+;block insitu stress -87000 -58000 -145000 0,0,0 gradient-z 15180  10120  25300  0,0,0 range group '8'
+;block insitu stress 74700 49800 124500 0,0,0 gradient-z 15600  10400  26000  0,0,0 range group '9'
+;block insitu stress 70380 46920 117300 0,0,0 gradient-z 15480  10320  25800  0,0,0 range group '10'
+;
+;fish define set_properties_grav
+;    local i = 11
+;    loop while i <= 30
+;        local group_name = string(i)  ; 转换为字符串
+;        command
+;            block insitu stress -2733300 -1822200 -4555500 0,0,0 gradient-z 8400  5600  14000  0,0,0 range group @group_name
+;        endcommand
+;        i = i + 1
+;    endloop
+;end
+;[set_properties_grav]
+;model factor-of-safety resolution 0.01
+
+;block insitu topo ratio-x 0.6 ratio-y 0.4
+
+
+
+
+model solve ratio 1e-4
+
+model save 'mmm2'
+;call'mmm3.txt'
+================================
+
+

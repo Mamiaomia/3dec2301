@@ -1,0 +1,33 @@
+model large-strain on
+
+
+;位移速度归零
+block gridpoint initialize displacement-x 0
+block gridpoint initialize displacement-y 0
+block gridpoint initialize displacement-z 0
+block gridpoint initialize velocity-x 0
+block gridpoint initialize velocity-y 0
+block gridpoint initialize velocity-z 0
+
+;program return
+;摩尔库伦模型
+block zone cmodel assign mohr-coulomb
+@yc_mk_value(name_group,rf_dens,rf_young,rf_possion,rf_cohesion,rf_friction,rf_tension)
+
+
+;层内节理赋参
+;block contact jmodel assign mohr
+;block contact property stiffness-normal 8e10 stiffness-shear 3e10 cohesion 2e6 friction 30 tension 1e6
+;block contact property stiffness-normal 1.67e9 stiffness-shear 4.55e8 cohesion 5e4 friction 2 tension 1e4 range joint-set @ss_id
+;block contact property stiffness-normal 8.4e8 stiffness-shear 2.25e8 cohesion 2.5e4 friction 2 tension 5e3 range joint-set [ss_id+1]
+;block contact property stiffness-normal 8.4e8 stiffness-shear 2.25e8 cohesion 2.5e4 friction 2 tension 5e3 range joint-set [ss_id+2]
+;@con_gp_to_value(name_group,contact_normal,contact_shear,rf_cohesion,rf_friction,rf_tension)
+;block contact material-table default property stiffness-normal 1e11 stiffness-shear 1e11 cohesion 2e7 friction 30 tension 1e7
+
+
+
+;开挖
+@kaiwa
+;block delete range group @name_group(coal_rf_n) position-x @coal_h [coal_h+toward_len]
+;model solve ratio 5e-5
+;model save [project_name+'_final']

@@ -1,0 +1,97 @@
+model new
+model restore 'mmm2'
+
+block gridpoint initialize displacement-x 0
+block gridpoint initialize displacement-y 0
+block gridpoint initialize displacement-z 0
+block gridpoint initialize velocity-x 0
+block gridpoint initialize velocity-y 0
+block gridpoint initialize velocity-z 0
+
+
+;block delete range group '001'
+;block delete range group '002'
+
+
+block zone cmodel assign mohr-coulomb
+block zone property dens 2590 bulk 1.09e9 she 0.88e9 fric 33 cohesion 1.06e6 ten 0.6e6 range group '1'
+block zone property dens 2541 bulk 2.46e9 she 1.73e9 fric 32 cohesion 0.92e6 ten 0.51e6 range group '2'
+block zone property dens 2492 bulk 10.2e9 she 5.1e9  fric 38 cohesion 0.8e6 ten 0.6e6 range group '3'
+block zone property dens 2558 bulk 5.68e9 she 3.12e9 fric 35 cohesion 1.285e6 ten 0.7e6 range group '4'
+block zone property dens 2700 bulk 7.32e9 she 10e9 fric 40 cohesion 3.03e6 ten 1.2e6 range group '5'
+block zone property dens 2254 bulk 5.2e9 she 2.7e9 fric 27 cohesion 1.3e6 ten 0.4e6 range group '6'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 fric 26 cohesion 0.5e6 ten 0.55e6 range group '7'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 fric 26 cohesion 0.5e6 ten 0.55e6 range group '11'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 fric 26 cohesion 0.5e6 ten 0.55e6 range group '12'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 fric 26 cohesion 0.5e6 ten 0.55e6 range group '13'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 fric 26 cohesion 0.5e6 ten 0.55e6 range group '14'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 fric 26 cohesion 0.5e6 ten 0.55e6 range group '15'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 fric 26 cohesion 0.5e6 ten 0.55e6 range group '16'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 fric 26 cohesion 0.5e6 ten 0.55e6 range group '17'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 fric 26 cohesion 0.5e6 ten 0.55e6 range group '18'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 fric 26 cohesion 0.5e6 ten 0.55e6 range group '19'
+block zone property dens 1268 bulk 0.4e9 she 0.25e9 fric 26 cohesion 0.5e6 ten 0.55e6 range group '20'
+
+block contact jmodel assign mohr 
+block contact property stiffness-normal 1e11 stiffness-shear 1e11 cohesion 1e6 friction 30 tension 1e5
+block contact material-table default property stiffness-normal 1e9 stiffness-shear 1e9 cohesion 0 friction 0 tension 0
+
+fish define stress_concentration_factor
+      loop foreach local zp block.zone.list
+          block.zone.extra(zp,3) =block.zone.stress.zz(zp)/block.zone.extra(zp,1) 
+          block.zone.extra(zp,4) =block.zone.stress.min(zp)/block.zone.extra(zp,2) 
+      end_loop 
+end
+
+;fish define read_from_file(name)
+;    local f, data0, data, m, n, i, j, line, line_sim, line_spl, line_dig
+;    
+;    f=file.open(name,'r')
+;    data0=file.read(f)
+;    file.close(f)
+;    
+;    data = list
+;    m = list.size(data0)
+;
+;    loop i(1,m)
+;        line = data0(i)
+;        line_sim = string.simplify(line)
+;        line_spl = string.split(line_sim,' ')
+;        n = list.size(line_spl)
+;        line_dig = list
+;        loop j(1,n)
+;            line_dig('end') = float(line_spl(j))
+;        end_loop
+;        data('e') = line_dig
+;    end_loop
+;    ;io.out(data)
+;    return data
+;end
+;
+
+
+block hide range group '1'
+block hide range group '2'
+block hide range group '3'
+block hide range group '4'
+block hide range group '5'
+block hide range group '6'
+
+fish define mining
+  loop n (1,11)
+    x1=n+10
+    x2=n*100
+    ss='mining_'+string(x2)+'m'
+    command 
+        block delete range group @x1
+        model step 20
+        ;[stress_concentration_factor]
+        ;[get_disp]
+        ;[get_stress]
+        model save @ss
+    endcommand
+  endloop
+end
+[mining]
+model step 2000
+model save 'mmm3'

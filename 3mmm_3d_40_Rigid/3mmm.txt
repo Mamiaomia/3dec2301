@@ -1,0 +1,66 @@
+model new
+model restore 'mmm2'
+
+block gridpoint initialize displacement-x 0
+block gridpoint initialize displacement-y 0
+block gridpoint initialize displacement-z 0
+block gridpoint initialize velocity-x 0
+block gridpoint initialize velocity-y 0
+block gridpoint initialize velocity-z 0
+
+block zone cmodel assign mohr-coulomb
+;表图层没有
+;block zone property dens 2000 young 0.51 poisson 18.35 range group '1'
+block zone property dens 2530 young 8.64E+09 poisson 0.24 fric 46 cohesion 5.6E+06 ten 3.36E+06 range group '1'
+block zone property dens 2600 young 5.80E+09 poisson 0.31  fric 35 cohesion 3.3E+06 ten 1.98E+06 range group '2'
+block zone property dens 2530 young 8.64E+09 poisson 0.24 fric 46 cohesion 5.6E+06 ten 3.36E+06  range group '3'
+block zone property dens 2600 young 5.80E+09 poisson 0.31  fric 35 cohesion 3.3E+06 ten 1.98E+06 range group '4'
+block zone property dens 2580 young 6.70E+09 poisson 0.26  fric 35 cohesion 4.5E+06 ten 2.7E+06 range group '5'
+block zone property dens 2600 young 6.20E+09 poisson 0.27  fric 34 cohesion 4.2E+06 ten 2.52E+06 range group '6'
+block zone property dens 2600 young 5.80E+09 poisson 0.31  fric 35 cohesion 3.3E+06 ten 1.98E+06 range group '7'
+block zone property dens 2530 young 8.64E+09 poisson 0.24  fric 46 cohesion 5.6E+06 ten 3.36E+06 range group '8'
+block zone property dens 2600 young 5.80E+09 poisson 0.31  fric 35 cohesion 3.3E+06 ten 1.98E+06 range group '9'
+block zone property dens 2580 young 6.70E+09 poisson 0.26  fric 35 cohesion 4.5E+06 ten 2.7E+06 range group '10'
+
+
+fish define set_properties_mohr_coulomb
+    local i = 11
+    loop while i <= 30
+        local group_name = string(i)
+        command
+            block zone property dens 1400 young 3.60E+09 poisson 0.32  fric 30 cohesion 2.8E+06 ten 1.68E+06 range group @group_name
+        endcommand
+        i = i + 1
+    endloop
+end
+[set_properties_mohr_coulomb]
+
+block contact jmodel assign mohr 
+block contact property stiffness-normal 1e11 stiffness-shear 1e11 cohesion 1e6 friction 30 tension 1e5
+block contact property stiffness-normal 1e9 stiffness-shear 1e9 cohesion 1e3 friction 0 tension 1e2 range position-z 220 746
+block contact property stiffness-normal 1e10 stiffness-shear 1e10 cohesion 1e4 friction 10 tension 1e3 range position-z 220 746
+block contact material-table default property stiffness-normal 1e9 stiffness-shear 1e9 cohesion 0 friction 0 tension 0
+
+fish define stress_concentration_factor
+      loop foreach local zp block.zone.list
+          block.zone.extra(zp,3) =block.zone.stress.zz(zp)/block.zone.extra(zp,1) 
+          block.zone.extra(zp,4) =block.zone.stress.min(zp)/block.zone.extra(zp,2) 
+      end_loop 
+end
+
+
+fish define mining
+  loop n (1,10)
+    x1=n+10
+    x2=n*100
+    ss='mining_'+string(x2)+'m'
+    command 
+        block delete range group @x1
+        model step 20000
+        model save @ss
+    endcommand
+  endloop
+end
+[mining]
+model step 20000
+model save 'mmm3'

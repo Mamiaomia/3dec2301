@@ -1,0 +1,43 @@
+;建立块体  四面体  砖块切割
+block create brick 0.0 @model_x 0.0 @model_y @rf_z(-1) @rf_z(1)
+
+;松散层分层
+@h_cut(rf_z(1,ss_rf_n+1),rf_edge_h(1,ss_rf_n),rf_tilt(1,ss_rf_n))
+[ss_id=list.size(planez_list)];没用
+
+
+
+;左侧岩体分层
+
+@h_cut(rf_z(ss_rf_n+1,rf_n+1),rf_edge_h(ss_rf_n+1,rf_n),rf_tilt(ss_rf_n+1,rf_n))
+[planez_list('end')=rf_z(-1)]
+[yc_left_id=list.size(planez_list)];没用
+
+
+
+
+;左侧岩体分组（松散层+岩层）
+[name_group=list] ;组序列归零 分组命名
+
+block hide off range plane dip @dc_tilt dip-direction 90.0 origin @dc_x1 0.0 @rf_z(coal_rf_n) above
+@group_name(ss_name,rf_z(1,ss_rf_n+1),rf_tilt(1,ss_rf_n),1,0)
+@group_name(yc_name,rf_z(ss_rf_n+1,-1),rf_tilt(ss_rf_n+1,rf_n),1,0)
+
+
+
+
+;横向分块
+block hide
+@v_cut_plane_nodc(planez_list(1,yc_left_id))
+
+block hide off range group 'coal_0'
+@coal_cut
+block hide off
+;program return
+
+;单元生成
+block zone generate edgelength @zone_edge
+;program return
+model save [project_name+'_model']
+
+;call '03ini_stress.dat'

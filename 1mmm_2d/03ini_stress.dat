@@ -1,0 +1,37 @@
+;岩层赋参
+block zone cmodel assign elastic
+@yc_elc_value(name_group,rf_dens,rf_young,rf_possion)
+
+;层内节理赋参
+block contact jmodel assign mohr
+;block contact property stiffness-normal 5e10 stiffness-shear 1e10 cohesion 5e6 friction 40 tension 5e6
+;block contact material-table default property stiffness-normal 1e11 stiffness-shear 1e11 cohesion 2e7 friction 30 tension 1e7
+
+@con_gp_to_value(name_group,contact_normal,contact_shear,rf_cohesion,rf_friction,rf_tension)
+block contact material-table default property stiffness-normal 1e11 stiffness-shear 1e11 cohesion 2e7 friction 30 tension 1e7
+
+;松散层初始应力
+model gravity 0 0 @gravity_value
+@first_stress(name_group(1,ss_rf_n),stress_z_left(1,ss_rf_n),gradient_z(1,ss_rf_n))
+;program return
+
+;左侧初始应力
+
+@first_stress(name_group(ss_rf_n+1,-1),stress_z_left(ss_rf_n+1,-1),gradient_z(ss_rf_n+1,-1))
+
+
+
+
+
+;边界条件
+block gridpoint apply velocity-x 0 range position-x -.1,.1
+block gridpoint apply velocity-x 0 range position-x [model_x-0.1],[model_x+0.1]
+block gridpoint apply velocity-y 0 range position-y -.1,.1
+block gridpoint apply velocity-y 0 range position-y [model_y-0.1],[model_y+0.1]
+block gridpoint apply velocity-z 0 range position-z [rf_z(-1)-0.1],[rf_z(-1)+0.1]
+
+
+model solve ratio 3e-4
+model save [project_name+'_ini_stress']
+;program return
+call '04kaiwa.dat'

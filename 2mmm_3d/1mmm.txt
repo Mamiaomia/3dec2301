@@ -1,0 +1,49 @@
+model new
+model random 10000
+model large-strain on
+;block merge-start
+;program call 'mmm2301_GVol_Deformable_Binar.3dgrid'
+block import filename 'mmmGVol_Deformable_Binarymmm.3dgrid'
+;block cut joint-set dip 90 dip-direction 90 origin 500201 3945700 237.365
+;block merge-finish
+block contact gen-sub
+
+
+block group '1' range group '001' 
+block group '1' range group '003' 
+block group '1' range group '008' 
+block group '1' range group '009' 
+block group '1' range group '010' 
+block hide range group '1'
+block group '2' range group '002'
+block hide range group '2'
+block group '3' range group '004'
+block hide range group '3'
+block group '4' range group '005'
+block hide range group '4'
+block group '6' range group '006'
+block hide range group '6'
+block group '5' range group '007'
+block hide range group '5'
+block group '7' range group '011'
+block group '7' range group '012'
+block hide range group '7'
+block group '20' range group '013'
+block group '11' range group '014'
+block group '19' range group '015'
+block group '18' range group '016'
+block group '17' range group '017'
+block group '16' range group '018'
+block group '12' range group '019'
+block group '15' range group '020'
+block group '14' range group '021'
+block group '13' range group '022'
+
+block hide off
+;block cut joint-set dip 90 dip-direction 90 origin 500201 3945700 237.365
+
+model save 'mmm1'
+
+;call 'mmm2.txt'
+
+

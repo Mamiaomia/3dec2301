@@ -1,0 +1,55 @@
+Itasca Consulting Group, Inc., Griddle-GVol version: 2.00.12 2021.10.1
+Rhino model: D:\3dec\griddle\mmm最终.3dm
+Time: Sun Mar  2 08:16:48 2025
+
+GVol input parameters
+  Mode: Tet
+  Output format: 3DEC (Rigid)
+  Advanced parameters
+    Maximum gradation: 0.5
+    Target size: 0
+    Optimization Level: 5
+    Shape quality weight: 0.75
+---------------------------------------------------------------------
+
+Input mesh
+  Number of surface elements: 9006
+  Number of nodes: 4122
+
+Output mesh
+  Number of tetrahedra: 20450
+  Number of nodes: 4513
+
+Meshing time: 0.94 s
+
+
+---------------------------------------------------------------------
+*********** Output Mesh Quality Information ***********
+
+Meshed volume: 601501237.38
+Number of meshed subdomains: 34
+Missed (unenforced) faces: 0
+Element min shape quality (QS) value: 0.02
+
+*********** Histogram QS for Tetrahedra (T4) ***********
+Total number of bins     :           11 
+Total number of counts   :        20450 
+Number of larger values  :            0 
+Number of smaller values :            0 
+V max                    : 9.619789E-01
+V mean                   : 3.437168E-01
+V min                    : 1.822706E-02
+
+Bin number       -- Bin boundaries --          Hits
+
+   10            0.90            1.00            19
+    9            0.80            0.90           122
+    8            0.70            0.80          1169
+    7            0.60            0.70          1305
+    6            0.50            0.60          3544
+    5            0.40            0.50          2919
+    4            0.30            0.40          1180
+    3            0.20            0.30          1840
+    2            0.10            0.20          5506
+    1            0.01            0.10          2846
+    0            0.00            0.01             0

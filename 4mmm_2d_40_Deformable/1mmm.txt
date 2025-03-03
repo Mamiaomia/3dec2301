@@ -1,0 +1,70 @@
+model new
+model random 10000
+model large-strain off
+;block merge-start
+;program call 'huashengpanshili_Rigid_Binary.3dgrid'
+block import filename 'mmmGVol_Deformable_Binarymmm2.3dgrid'
+;block merge-finish
+block contact gen-sub
+
+
+block group '1' range group '003'
+block group '2' range group '009'
+block group '3' range group '010'
+block group '4' range group '008'
+block group '5' range group '005'
+block group '6' range group '001'
+block hide range group '1'
+block hide range group '2'
+block hide range group '3'
+block hide range group '4'
+block hide range group '5'
+block hide range group '6'
+block group '7' range group '004'
+block hide range group '7'
+
+block group '8' range group '007'
+block hide range group '8'
+
+;倒数第二层&煤层的最外围
+block group '9' range group '012'
+block group '9' range group '011'
+block group '9' range group '006'
+block group '9' range group '017'
+block group '9' range group '014'
+
+block hide range group '9'
+
+block group '10' range group '002'
+block hide range group '10'
+;煤层一
+block group '11' range group '031'
+block group '12' range group '033'
+block group '13' range group '034'
+block group '14' range group '030'
+block group '15' range group '027'
+block group '16' range group '025'
+block group '17' range group '028'
+block group '18' range group '020'
+block group '19' range group '023'
+block group '20' range group '022'
+;煤层二
+block group '21' range group '024'
+block group '22' range group '029'
+block group '23' range group '032'
+block group '24' range group '026'
+block group '25' range group '019'
+block group '26' range group '018'
+block group '27' range group '021'
+block group '28' range group '016'
+block group '29' range group '015'
+block group '30' range group '013'
+block hide off
+
+;block zone generate edgelength 3
+model save 'mmm1'
+
+call 'mmm2.txt'
+
+
+
