@@ -71,7 +71,7 @@ model grav 0 0 -10
 model solve ratio 1e-4
 
 model save 'mmm2'
-;call'mmm3.txt'
+call'3mmm.txt'
 ================================
 
 

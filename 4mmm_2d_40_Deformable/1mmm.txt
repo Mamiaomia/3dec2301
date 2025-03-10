@@ -3,7 +3,7 @@ model random 10000
 model large-strain off
 ;block merge-start
 ;program call 'huashengpanshili_Rigid_Binary.3dgrid'
-block import filename 'mmmGVol_Deformable_Binarymmm2.3dgrid'
+block import filename 'mmmGVol_Deformable_Binarymmm2d.3dgrid'
 ;block merge-finish
 block contact gen-sub
 
@@ -64,7 +64,7 @@ block hide off
 ;block zone generate edgelength 3
 model save 'mmm1'
 
-call 'mmm2.txt'
+call '2mmm.txt'
 
 
 

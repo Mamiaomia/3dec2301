@@ -54,11 +54,11 @@ fish define mining
     ss='mining_'+string(x2)+'m'
     command 
         block delete range group @x1
-        model step 20
+        model step 20000
         model save @ss
     endcommand
   endloop
 end
 [mining]
-model step 20
-model save 'mmm3'
+model step 20000
+model save '3mmm'

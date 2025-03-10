@@ -5,8 +5,8 @@ model large-strain off
 ;program call 'huashengpanshili_Rigid_Binary.3dgrid'
 block import filename 'mmmGVol_Deformable_Binarymmm.3dgrid'
 ;block merge-finish
+;block join on
 block contact gen-sub
-
 
 block group '1' range group '006' 
 block group '2' range group '010' 
@@ -22,9 +22,9 @@ block hide range group '5'
 block hide range group '6'
 block group '7' range group '007'
 block hide range group '7'
-
 block group '8' range group '008'
 block hide range group '8'
+;pause key
 
 ;倒数第二层&煤层的最外围
 block group '9' range group '005'
